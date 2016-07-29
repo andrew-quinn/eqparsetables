@@ -1,0 +1,6 @@
+{
+  "name": "EQParseTables",
+  "tagline": "Transform GamParse output into Enjin table format ",
+  "body": "# Welcome to EQParseTables.\r\nEQParseTables exists to turn the forum output from GamParse into tables of various formats in order to facilitate easy comparison.\r\n\r\nNoticing that a_cleric03 is casting way more spells than you and getting showered with phatlewtz and the adoration of the tanks? No problem! Fire up EQParseTables and instantly compare your cast counts itemized by spell. Geek out over the breakdown of various spell types in beautiful stacked bar graphs and see exactly who's doing what.\r\n\r\nIf you've ever wanted to take a game way too seriously, EQParseTables can help you make that dream come true!",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
