@@ -59,41 +59,35 @@
 <h3>
 <a id="combining-parses" class="anchor" href="#combining-parses" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Combining Parses</h3>
 
-<p>It is also possible to combine cast parses from multiple sources into one in order to get more accurate results. Given the nature of logging in EQ and the data output by GamParse, EQParseTables uses a relatively naive method of combining data from multiple sources. For each spell cast, the highest cast count is taken for each player. For example, given two input sources containing the following</p>
+<p>It is also possible to combine cast parses from multiple sources into one in order to get more accurate results. Given the nature of logging in EQ and the data output by GamParse, EQParseTables uses a relatively naive method of combining data from multiple sources. For each spell cast, the highest cast count is taken for each player. For example, given two input sources containing</p>
 
-<p><code>[B]Combined: An enraged lemming on 7/26/2016[/B]</code></p>
+<pre><code>[B]Combined: An enraged lemming on 7/26/2016[/B]
 
-<p><code>[B]Healzalot - 149[/B]</code></p>
+[B]Healzalot - 149[/B]
+   --- Huge Healing - 100
+   --- Pretty Big Healing - 49
 
-<p><code>--- Huge Healing - 100</code></p>
+[B]Healzalittle - 15[/B]
+   --- Huge Healing - 10
+   --- Pretty Big Healing - 5
 
-<p><code>--- Pretty Big Healing - 49</code></p>
-
-<p><code>[B]Healzalittle - 15[/B]</code></p>
-
-<p><code>--- Huge Healing - 10</code></p>
-
-<p><code>--- Pretty Big Healing - 5</code></p>
-
-<p><code>[B]Produced by GamParse v1.5.1.6[/B]</code></p>
+[B]Produced by GamParse v1.5.1.6[/B]
+</code></pre>
 
 <p>and</p>
 
-<p><code>[B]Combined: An enraged lemming on 7/26/2016[/B]</code></p>
+<pre><code>[B]Combined: An enraged lemming on 7/26/2016[/B]
 
-<p><code>[B]Healzalot - 135[/B]</code></p>
+[B]Healzalot - 135[/B]
+   --- Huge Healing - 85
+   --- Pretty Big Healing - 50
 
-<p><code>--- Huge Healing - 85</code></p>
+[B]Healzalittle - 19[/B]
+   --- Huge Healing - 15
+   --- Pretty Big Healing - 4
 
-<p><code>--- Pretty Big Healing - 50</code></p>
-
-<p><code>[B]Healzalittle - 19[/B]</code></p>
-
-<p><code>--- Huge Healing - 15</code></p>
-
-<p><code>--- Pretty Big Healing - 4</code></p>
-
-<p><code>[B]Produced by GamParse v1.5.1.6[/B]</code></p>
+[B]Produced by GamParse v1.5.1.6[/B]
+</code></pre>
 
 <p>you would end up with a table showing Healzalot having cast Huge Healing 100 times and Pretty Big Healing 50 times, with Healzalittle having cast them 15 and 5 times, respectively.</p>
 
@@ -108,9 +102,9 @@
 
 <p>to your blacklist.ini! Since EQParseTables blacklists anything beginning with the spell names you type in, ignoring those annoying placeholder clickies and illusions is as easy as adding</p>
 
-<p><code>Shadow of</code></p>
-
-<p><code>Illusion:</code></p>
+<pre><code>Shadow of
+Illusion:
+</code></pre>
 
 <p>to the blacklist. Hooray!</p>
 
