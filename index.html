@@ -1,55 +1,50 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>EQParseTables by cfdwalrus</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/cfdwalrus/eqparsetables">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/cfdwalrus/eqparsetables/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/cfdwalrus/eqparsetables/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <section class="page-header">
+      <h1 class="project-name">EQParseTables</h1>
+      <h2 class="project-tagline">Transform GamParse output into various table formats</h2>
+      <a href="https://github.com/cfdwalrus/eqparsetables" class="btn">View on GitHub</a>
+      <a href="https://github.com/cfdwalrus/eqparsetables/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cfdwalrus/eqparsetables/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>EQParseTables</h1>
-          <p>Transform GamParse output into Enjin table format </p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/cfdwalrus">cfdwalrus</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <h1>
-<a id="welcome-to-eqparsetables" class="anchor" href="#welcome-to-eqparsetables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to EQParseTables.</h1>
+    <section class="main-content">
+      <h1>
+<a id="welcome" class="anchor" href="#welcome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome</h1>
 
 <p>EQParseTables exists to turn the forum output from GamParse into tables of various formats in order to facilitate easy comparison.</p>
 
 <p>Noticing that a_cleric03 is casting way more spells than you and getting showered with phatlewtz and the adoration of the tanks? No problem! Fire up EQParseTables and instantly compare your cast counts itemized by spell. Geek out over the breakdown of various spell types in beautiful stacked bar graphs and see exactly who's doing what.</p>
 
 <p>If you've ever wanted to take a game way too seriously, EQParseTables can help you make that dream come true!</p>
-      </section>
 
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+<h2>
+<a id="using-eqparsetables" class="anchor" href="#using-eqparsetables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using EQParseTables</h2>
+
+<p>For the time being, EQParseTables is a console application. You'll need to paste the forum output from GamParse into a file and point the script at it. For example, if you save your parse summary as healparse.txt, you'd call the following from the command line:
+<code>$ python3 eqparsetables.py healparse.txt</code>
+For your convenience, EQParseTables looks for data in a file called parse.txt if no path is given.</p>
+
+<p>It is also possible to combine cast parses from multiple sources into one in order to get more accurate results. Given the nature of logging in EQ and the data output by GamParse, EQParseTables uses a relatively naive method of combining data from multiple sources. For each spell cast, the highest cast count is taken for each player. </p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cfdwalrus/eqparsetables">EQParseTables</a> is maintained by <a href="https://github.com/cfdwalrus">cfdwalrus</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
   </body>
 </html>
