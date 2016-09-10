@@ -53,6 +53,7 @@ heals = {
     'Peaceful Convergence of Spirits': 'AA + Clicks',
     'Spirit of the Wood': 'AA + Clicks',
     'Lunasoothe': 'Group Heals',
+    'Survival of the Fortuitous': 'Group Heals',
     'Survival of the Serendipitous': 'Group Heals',
     'Panavida': 'Panavida',
     'Remote Sunflash': 'Remotes',
@@ -157,6 +158,18 @@ utilities = {
 
 
 nukes = {
+    # Clerics
+    'Smite the Wicked': 'AA Nukes',
+    'Turn Undead': 'AA Nukes',
+    'Glorious Judgment': 'Twincast',
+    'Abrogate the Undead': 'Undead',
+    'Eradicate the Undead': 'Undead',
+    'Chromabash': 'Vanilla',
+    'Justice': 'Vanilla',
+    'Ardent Contravention': 'Contraventions',
+    'Virtuous Contravention': 'Contraventions',
+    'Elysian Contravention': 'Contraventions',
+
     # Druids
     'Storm Strike': 'AA Nukes',
     'Fire Storm': 'AA Nukes',
@@ -168,7 +181,16 @@ nukes = {
     'Katabatic Roar': 'Roars',
     'Frostweave Crystals': 'Vanilla',
     'Summer Sunfire': 'Vanilla',
-    'Winter\'s Wildflame': 'Vanilla'
+    'Winter\'s Wildflame': 'Vanilla',
+
+    # Shamans
+    'Frost Gift': 'Twincast',
+    'Glacial Gift': 'Twincast',
+    'Reefmaw\'s Bite': 'Vanilla',
+
+    # Common
+    'Banestrike': 'Banestrike'
+
 }
 
 

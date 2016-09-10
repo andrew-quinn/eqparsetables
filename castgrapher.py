@@ -71,7 +71,7 @@ def graph_nukes(table: parsedb.ParseTable, separate_spells=False):
     :param separate_spells: flag specifying whether nukes should be grouped by type or named individually
     :return: void
     """
-    if table.title not in ['Druids']:
+    if table.title not in ['Clerics', 'Druids', 'Shamans']:
         print('Nuke graphs cannot be generated from the {0} table.'.format(table.title))
         return
 
@@ -125,9 +125,10 @@ def generate_class_graphs(table: parsedb.ParseTable):
     :return: void
     """
     dispatch = {
-        'Clerics': [graph_heals, graph_utilities],
+        'Clerics': [graph_heals, graph_utilities, graph_nukes],
         'Druids': [graph_heals, graph_utilities, graph_nukes],
-        'Shamans': [graph_heals, graph_utilities]
+        'Shamans': [graph_heals, graph_utilities, graph_nukes]
     }
+
     for f in dispatch.get(table.title, []):
         f(table)
