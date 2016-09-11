@@ -25,6 +25,17 @@ def check_file(path):
         sys.exit()
 
 
+def check_default_file(path):
+    if not os.path.isfile(path):
+        answer = input("Could not find the file {0}. Would you like to create a blank version now? [y/N] ".format(path))
+        if str(answer).lower() == 'y':
+            with open(path, 'a+') as file_handle:
+                pass
+        else:
+            print('Exiting.')
+            sys.exit()
+
+
 def main(argv):
     cwd = os.getcwd()
     config_path = cwd + '/config.ini'
@@ -51,10 +62,14 @@ def main(argv):
     if args.blacklist:
         check_file(args.blacklist)
         blacklist_path = args.blacklist
+    else:
+        check_default_file(blacklist_path)
 
     if args.config:
         check_file(args.config)
         config_path = args.config
+    else:
+        check_default_file(config_path)
 
     if args.dps:
         # set dps placement bounds
