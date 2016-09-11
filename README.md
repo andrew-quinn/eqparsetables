@@ -69,3 +69,13 @@ Since GamParse summaries don't include players' classes, you'll need to set up a
 `Evilhealzforthewin,DRU,Evil`
 
 This will allow EQParseTables to recognize your character in the parse summary and assign it to the proper table. It will also change your character's name to Evil in the table header so that things stay nice and tidy.
+
+
+# Dependencies
+EQParseTables needs the following modules to be installed on your system (either globally or in a virtual environment) in order to run:
+* cairocffi
+* cairosvg
+* cssselect
+* lxml
+* pygal
+* tinycss
