@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Formats and filters GamParse spells and disc forum output."""
 
-import sys
 import argparse
 import os
-import gpcastreader as gpc
-import tableformatter as tf
-import parsedb
+import sys
+
 import castgrapher as cg
+import gpcastreader as gpc
+import parsedb
+import tableformatter as tf
 
 __author__ = 'Andrew Quinn'
 __copyright__ = 'Copyright 2015-2016, Andrew Quinn'
@@ -51,7 +52,7 @@ def main(argv):
     parser.add_argument('-c', '--config', help='path to config CSV file', metavar='PATH')
     parser.add_argument('--dps', action='store_true', help='force dps formatting')
     parser.add_argument('--tty', action='store_true', help='output text (default is enjin post format)')
-    parser.add_argument('--attn', action='store_true', help='reconstruct attendance list') # Work in progress...
+    parser.add_argument('--attn', action='store_true', help='reconstruct attendance list')  # Work in progress...
     parser.add_argument('-f', '--dpsfirst', help='highest ranking dpser to show', metavar='FIRST')
     parser.add_argument('-l', '--dpslast', help='lowest ranking dpser to show', metavar='LAST')
 

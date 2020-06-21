@@ -5,6 +5,7 @@ class TableStrings:
     """
     A simple container class for formatted table data and meta-data.
     """
+
     def __init__(self):
         self.title = ''
         self.table_start = ''
@@ -104,7 +105,8 @@ def format_tty_table(table: parsedb.ParseTable):
         summary = ['__Raid__'] + [humanize(srow[1])] + [humanize(srow[2])] + [str(srow[3]) + '%']
         ts.headers = [dpsrow.format(*labels)]
         ts.headers.append(dpsrow.format('', *summary))
-        ts.rows = [dpsrow.format(i + 1, r[0], humanize(r[1]), humanize(r[2]), str(r[3]) + '%') for i, r in enumerate(table.rows[1:])]
+        ts.rows = [dpsrow.format(i + 1, r[0], humanize(r[1]), humanize(r[2]), str(r[3]) + '%') for i, r in
+                   enumerate(table.rows[1:])]
 
     return ts
 

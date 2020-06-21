@@ -1,10 +1,10 @@
-import sqlite3
-import everquestinfo as eq
-
+import collections as co
 import itertools as it
 import operator as op
-import collections as co
+import sqlite3
 import sys
+
+import everquestinfo as eq
 
 
 class ParseTable:
@@ -68,7 +68,8 @@ class ParseDB:
             for spell in player[1]:
                 self.cur.execute('INSERT OR IGNORE INTO casts (player, spell, count) '
                                  'VALUES (?, ?, ?) ', (player[0], spell, player[1][spell]))
-                self.cur.execute('SELECT player, spell, count FROM casts WHERE player LIKE ? AND spell LIKE ?', (player[0], spell))
+                self.cur.execute('SELECT player, spell, count FROM casts WHERE player LIKE ? AND spell LIKE ?',
+                                 (player[0], spell))
                 data = self.cur.fetchall()
                 old_count = int(data[0][2])
                 if old_count < int(player[1][spell]):
@@ -97,7 +98,7 @@ class ParseDB:
     def get_cast_table(self, eq_class):
         self.cur.execute('SELECT spell, name, count '
                          'FROM (SELECT name FROM players WHERE class=?) '
-                         'JOIN casts ON name=casts.player;', (eq_class, ))
+                         'JOIN casts ON name=casts.player;', (eq_class,))
         data = self.cur.fetchall()
         players = sorted(set(row[1] for row in data))
         pivot = ((spell, co.defaultdict(lambda: None, (it.islice(d, 1, None) for d in data)))
@@ -111,7 +112,7 @@ class ParseDB:
             self.cur.execute('SELECT p.name, d.sdps, d.damage, d.percentage '
                              'FROM (SELECT name FROM players WHERE class=?) p '
                              'JOIN deeps d ON  p.name=d.player '
-                             'ORDER BY d.sdps DESC;', (eq_class, ))
+                             'ORDER BY d.sdps DESC;', (eq_class,))
         else:
             self.cur.execute('SELECT player, sdps, damage, percentage FROM deeps ORDER BY sdps DESC')
         data = self.cur.fetchall()[first - 1: last]
@@ -133,6 +134,6 @@ class ParseDB:
         for p in players:
             print('[tr][td]{0}[/td][/tr]'.format(p))
         print('[/table]')
-        #columns = ['Name']
-        #rows = [p for p in players]
-        #return ParseTable('Event', columns, rows)
+        # columns = ['Name']
+        # rows = [p for p in players]
+        # return ParseTable('Event', columns, rows)

@@ -1,14 +1,17 @@
-import os
 import operator as op
+import os
+
 import pygal as pg
-import parsedb
+
 import everquestinfo as eq
+import parsedb
 
 
 class SpellFilter:
     """
     A simple container class used to classify spells.
     """
+
     def __init__(self, name, spells):
         """
         Construct a SpellFilter object.

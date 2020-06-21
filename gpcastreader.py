@@ -1,12 +1,13 @@
+import collections
 import csv
 import re
-import collections
 
 
 class GPCastReader:
     """
     Read GamParse caster output information and store it for later processing
     """
+
     def __init__(self, input_path, config_path, blocklist_path):
         """
         Create a GPCastReader object.
@@ -119,6 +120,7 @@ class GPDPSReader:
     """
     Read GamParse dps output information and store it for later processing.
     """
+
     def __init__(self, input_path, config_path):
         """
         Construct a GPDPSReader object.
@@ -152,9 +154,11 @@ class GPDPSReader:
         :return: a dictionary of dictionaries associating each dpser with his or her stats
         """
         dpser = 'unknown'
-        gp_header = re.compile('(?P<mob>(?:Combined: )?(?:[\w`,]+ ?)+) on (?P<date>\d{1,2}/\d{1,2}/\d{2,4}) in (?P<time>\d{1,5})sec')
+        gp_header = re.compile(
+            '(?P<mob>(?:Combined: )?(?:[\w`,]+ ?)+) on (?P<date>\d{1,2}/\d{1,2}/\d{2,4}) in (?P<time>\d{1,5})sec')
         name_grabber = re.compile('\[B\](?P<name>\w+)\[/B\]')
-        dps_grabber = re.compile('(?P<total>\d+) \@ (?P<sdps>\d+) sdps \((?P<dps>\d+) dps in (?P<time>\d+)s\) \[(?P<pct>\d+(\.\d+)?)%\]')
+        dps_grabber = re.compile(
+            '(?P<total>\d+) \@ (?P<sdps>\d+) sdps \((?P<dps>\d+) dps in (?P<time>\d+)s\) \[(?P<pct>\d+(\.\d+)?)%\]')
         gp_bullet = ' --- '
 
         dpser_dod = collections.defaultdict(dict)
@@ -205,14 +209,14 @@ class GPDPSReader:
 
 
 def read_raw_parse(path):
-        """
-        Read GamParse's forum output into a list.
+    """
+    Read GamParse's forum output into a list.
 
-        :param path: path to a file containing GamParse output
-        :return: a list containing the lines of the input file
-        """
-        with open(path, 'r') as input_handle:
-            return input_handle.read().splitlines()
+    :param path: path to a file containing GamParse output
+    :return: a list containing the lines of the input file
+    """
+    with open(path, 'r') as input_handle:
+        return input_handle.read().splitlines()
 
 
 def read_blocklist(path):
