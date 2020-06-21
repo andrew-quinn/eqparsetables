@@ -7,32 +7,32 @@ class GPCastReader:
     """
     Read GamParse caster output information and store it for later processing
     """
-    def __init__(self, input_path, config_path, blacklist_path):
+    def __init__(self, input_path, config_path, blocklist_path):
         """
         Create a GPCastReader object.
 
         :param input_path: path to a plain text file containing GamParse output
         :param config_path: path to a CSV file with player / class information
-        :param blacklist_path: path to a list of spells to be ignored
+        :param blocklist_path: path to a list of spells to be ignored
         """
         self.classes = set()
         self.mob = ''
         self.date = ''
 
         self.gp_lines = read_raw_parse(input_path)
-        self.blacklist = read_blacklist(blacklist_path)
+        self.blocklist = read_blocklist(blocklist_path)
         self.config = init_config(config_path)
 
         self.caster_dod = self.init_caster_dod()
 
-    def is_blacklisted(self, spell_name):
+    def is_blocklisted(self, spell_name):
         """
-        Indicate whether a spell is blacklisted or not.
+        Indicate whether a spell is blocklisted or not.
 
         :param spell_name: the spell to check
         :return: True if spell is ignored, otherwise false.
         """
-        return any(spell_name.startswith(b) for b in self.blacklist)
+        return any(spell_name.startswith(b) for b in self.blocklist)
 
     def get_eq_classes(self):
         """
@@ -79,7 +79,7 @@ class GPCastReader:
                     continue
                 scc = line[len(gp_bullet):].split(" - ")
                 spell = rk.sub('', scc[0])
-                if not self.is_blacklisted(spell):
+                if not self.is_blocklisted(spell):
                     if spell in caster_dod[caster]:
                         print(('Spell {0} already exists in dictionary for {1} with cast count {2}... '
                                'incrementing by {3}').format(spell, caster, caster_dod[caster][spell], scc[1]))
@@ -215,12 +215,12 @@ def read_raw_parse(path):
             return input_handle.read().splitlines()
 
 
-def read_blacklist(path):
+def read_blocklist(path):
     """
-    Read the blacklist file into a list of ignored spells.
+    Read the blocklist file into a list of ignored spells.
 
-    :param path: the path to the blacklist file
-    :return: a list of blacklisted spells
+    :param path: the path to the blocklist file
+    :return: a list of blocklisted spells
     """
     with open(path, 'r') as bl_handle:
         return bl_handle.read().splitlines()

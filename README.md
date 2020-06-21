@@ -48,20 +48,20 @@ and
 
 you would end up with a table showing Healzalot having cast Huge Healing 100 times and Pretty Big Healing 50 times, with Healzalittle having cast them 15 and 5 times, respectively.
 
-### Blacklisting Spells
-Let's face it, not every spellcast that ends up in your log file is necessarily interesting. Does anyone care that a cleric cast Lesser Yaulp 342 times on last night's raid? Not likely. That's where the blacklist comes in.
+### Blocklisting Spells
+Let's face it, not every spellcast that ends up in your log file is necessarily interesting. Does anyone care that a cleric cast Lesser Yaulp 342 times on last night's raid? Not likely. That's where the blocklist comes in.
 
-Create a file named `blacklist.ini` in the directory with eqparsetables.py or direct EQParseTables to a custom blacklist using the `-b` switch followed by the path to your custom blacklist. Blacklisting a spell is then as simple as adding a line to that file containing only the name of the spell you want blacklisted. Don't worry about adding spell ranks to the end of the name; EQParseTables takes care of that for you. For instance, if you want to blacklist all ranks of Lesser Yaulp, just add the line
+Create a file named `blocklist.ini` in the directory with eqparsetables.py or direct EQParseTables to a custom blocklist using the `-b` switch followed by the path to your custom blocklist. Blocklisting a spell is then as simple as adding a line to that file containing only the name of the spell you want blocklisted. Don't worry about adding spell ranks to the end of the name; EQParseTables takes care of that for you. For instance, if you want to blocklist all ranks of Lesser Yaulp, just add the line
 
 `Lesser Yaulp`
 
-to your blacklist.ini! Since EQParseTables blacklists anything beginning with the spell names you type in, ignoring those annoying placeholder clickies and illusions is as easy as adding
+to your blocklist.ini! Since EQParseTables blocklists anything beginning with the spell names you type in, ignoring those annoying placeholder clickies and illusions is as easy as adding
 
 `Shadow of`
 
 `Illusion:`
 
-to the blacklist. Hooray!
+to the blocklist. Hooray!
 
 ### Player Config
 Since GamParse summaries don't include players' classes, you'll need to set up a file called `config.ini` in your EQParseTables directory. This is what's known as a CSV (comma separated values) file, and adding a player is as easy as adding a line for each player containing his or her name, EQ class abbreviation, and nickname. For instance, if you have a druid with the ridiculously long and just plain ridiculous name Evilhealzforthewin, simply add this to your config.ini:

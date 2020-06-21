@@ -4,7 +4,7 @@ __pycache__/*
 venv/
 
 # Config and input / output files
-blacklist.*
+blocklist.*
 config.*
 parse.*
 out

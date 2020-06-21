@@ -39,7 +39,7 @@ def check_default_file(path):
 def main(argv):
     cwd = os.getcwd()
     config_path = cwd + '/config.ini'
-    blacklist_path = cwd + '/blacklist.ini'
+    blocklist_path = cwd + '/blocklist.ini'
     default_path = cwd + '/parse.txt'
     dps_first = 1
     dps_last = sys.maxsize
@@ -47,7 +47,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(description='Transform GamParse output into you favorite forum table format.')
     parser.add_argument('paths', help='a list of paths containing GamParse output', nargs='*', metavar='PATHS')
-    parser.add_argument('-b', '--blacklist', help='path to blacklist', metavar='PATH')
+    parser.add_argument('-b', '--blocklist', help='path to blocklist', metavar='PATH')
     parser.add_argument('-c', '--config', help='path to config CSV file', metavar='PATH')
     parser.add_argument('--dps', action='store_true', help='force dps formatting')
     parser.add_argument('--tty', action='store_true', help='output text (default is enjin post format)')
@@ -59,11 +59,11 @@ def main(argv):
 
     # set input paths
 
-    if args.blacklist:
-        check_file(args.blacklist)
-        blacklist_path = args.blacklist
+    if args.blocklist:
+        check_file(args.blocklist)
+        blocklist_path = args.blocklist
     else:
-        check_default_file(blacklist_path)
+        check_default_file(blocklist_path)
 
     if args.config:
         check_file(args.config)
@@ -109,13 +109,13 @@ def main(argv):
         if args.paths:
             for path in args.paths:
                 check_file(path)
-            reader = gpc.GPCastReader(args.paths[0], config_path, blacklist_path)
+            reader = gpc.GPCastReader(args.paths[0], config_path, blocklist_path)
         else:
-            reader = gpc.GPCastReader(default_path, config_path, blacklist_path)
+            reader = gpc.GPCastReader(default_path, config_path, blocklist_path)
         pdb = parsedb.ParseDB(reader.config, caster_dod=reader.caster_dod)
         if len(args.paths) > 1:
             for path in args.paths[1:]:
-                reader = gpc.GPCastReader(path, config_path, blacklist_path)
+                reader = gpc.GPCastReader(path, config_path, blocklist_path)
                 pdb.update_cast_parse(reader.caster_dod)
 
         # make cast output
