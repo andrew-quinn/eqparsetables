@@ -46,7 +46,7 @@ def main(argv):
     dps_last = sys.maxsize
     padding = '\n\n'
 
-    parser = argparse.ArgumentParser(description='Transform GamParse output into you favorite forum table format.')
+    parser = argparse.ArgumentParser(description='Transform GamParse output into your favorite forum table format.')
     parser.add_argument('paths', help='a list of paths containing GamParse output', nargs='*', metavar='PATHS')
     parser.add_argument('-b', '--blocklist', help='path to blocklist', metavar='PATH')
     parser.add_argument('-c', '--config', help='path to config CSV file', metavar='PATH')
