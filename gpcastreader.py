@@ -20,7 +20,7 @@ class GPCastReader:
         self.mob = ''
         self.date = ''
 
-        self.gp_lines = read_raw_parse(input_path)
+        self.input_path = input_path
         self.blocklist = read_blocklist(blocklist_path)
         self.config = init_config(config_path)
 
@@ -69,7 +69,8 @@ class GPCastReader:
         gp_bullet = '   --- '
 
         caster_dod = collections.defaultdict(dict)
-        for line in self.gp_lines:
+        lines = read_raw_parse(self.input_path)
+        for line in lines:
             if line.upper().startswith('[B]'):
                 caster = self.read_entry_header(gp_header, name_grabber, line)
                 if caster == 'unknown':
@@ -129,7 +130,7 @@ class GPDPSReader:
         :param config_path: path to a CSV file with player / class information
         """
         self.classes = set()
-        self.gp_lines = read_raw_parse(input_path)
+        self.input_path = input_path
         self.config = init_config(config_path)
         self.guild_stats = {}
 
@@ -161,8 +162,9 @@ class GPDPSReader:
             '(?P<total>\d+) \@ (?P<sdps>\d+) sdps \((?P<dps>\d+) dps in (?P<time>\d+)s\) \[(?P<pct>\d+(\.\d+)?)%\]')
         gp_bullet = ' --- '
 
+        lines = read_raw_parse(self.input_path)
         dpser_dod = collections.defaultdict(dict)
-        for line in self.gp_lines:
+        for line in lines:
             if line.upper().startswith('[B]'):
                 dpser = self.read_entry_header(gp_header, name_grabber, line)
                 if dpser == 'unknown' or dpser == 'Total':
