@@ -228,6 +228,9 @@ def read_blocklist(path):
     :param path: the path to the blocklist file
     :return: a list of blocklisted spells
     """
+    if path.strip() == "":
+        return []
+
     with open(path, 'r') as bl_handle:
         return bl_handle.read().splitlines()
 
