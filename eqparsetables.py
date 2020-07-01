@@ -6,9 +6,12 @@ import os
 import sys
 
 import castgrapher as cg
-import gpcastreader as gpc
-import parsedb
-import tableformatter as tf
+import gamparsecastreader as gpc
+import gamparsedpsreader as gpd
+import enjinformatter
+import ttyformatter
+import playerdata
+import casttable
 
 __author__ = 'Andrew Quinn'
 __copyright__ = 'Copyright 2015-2016, Andrew Quinn'
@@ -18,6 +21,100 @@ __version__ = '0.1'
 __maintainer__ = 'Andrew Quinn'
 __email__ = 'andrew@under.co.nz'
 __status__ = 'Prototype'
+
+
+def get_arg_parser():
+    parser = argparse.ArgumentParser(description='Transform GamParse output into your favorite forum table format.')
+    parser.add_argument('paths', help='a list of paths containing GamParse output', nargs='*', metavar='PATHS')
+    parser.add_argument('-b', '--blocklist', help='path to blocklist', metavar='PATH')
+    parser.add_argument('-c', '--config', help='path to config CSV file', metavar='PATH')
+    parser.add_argument('--dps', action='store_true', help='force dps formatting')
+    parser.add_argument('--tty', action='store_true', help='output text (default is enjin post format)')
+    parser.add_argument('--attn', action='store_true', help='reconstruct attendance list')  # Work in progress...
+    parser.add_argument('-f', '--dpsfirst', help='highest ranking dpser to show', metavar='FIRST')
+    parser.add_argument('-l', '--dpslast', help='lowest ranking dpser to show', metavar='LAST')
+
+    return parser
+
+
+def main(argv):
+    parser = get_arg_parser()
+    args = parser.parse_args()
+
+    paths = get_input_paths(args)
+    player_data = get_player_data(args)
+    make_table = get_table_maker(args)
+
+    if args.dps:
+        dps_first, dps_last = get_dps_bounds(args)
+        handle_dps(paths, player_data, dps_first, dps_last, make_table)
+    else:
+        blocked_spells = get_blocklist(args)
+        handle_casts(paths, player_data, blocked_spells, make_table)
+
+
+def get_input_paths(args):
+    default_path = os.getcwd() + '/parse.txt'
+    paths = list()
+    if args.paths:
+        for path in args.paths:
+            check_file(path)
+            paths.append(path)
+    else:
+        check_default_file(default_path)
+        paths.append(default_path)
+    return paths
+
+
+def get_blocklist(args):
+    blocklist_path = os.getcwd() + '/blocklist.ini'
+    if args.blocklist:
+        check_file(args.blocklist)
+        blocklist_path = args.blocklist
+    else:
+        check_default_file(blocklist_path)
+
+    blocklist = []
+    with open(blocklist_path, 'r') as bl_handle:
+        for row in bl_handle.read().splitlines():
+            blocklist.append(row.strip())
+
+    return blocklist
+
+
+def get_player_data(args):
+    config_path = os.getcwd() + '/config.ini'
+    if args.config:
+        check_file(args.config)
+        config_path = args.config
+    else:
+        check_default_file(config_path)
+    return playerdata.PlayerData(config_path)
+
+
+def get_table_maker(args):
+    if args.tty:
+        return ttyformatter.make_table
+    else:
+        return enjinformatter.make_table
+
+
+def get_dps_bounds(args):
+    """
+    Get dps placement bounds from args.
+
+    :param args: parsed arguments
+    :return: placement indices of the first and last players to be shown
+    """
+    dps_first = 0
+    dps_last = sys.maxsize
+
+    if args.dpsfirst:
+        dps_first = int(args.dpsfirst) - 1
+    if args.dpslast:
+        dps_last = int(args.dpslast)
+
+    return sorted([0, dps_first, dps_last, sys.maxsize])[1:3]
 
 
 def check_file(path):
@@ -30,115 +127,80 @@ def check_default_file(path):
     if not os.path.isfile(path):
         answer = input("Could not find the file {0}. Would you like to create a blank version now? [y/N] ".format(path))
         if str(answer).lower() == 'y':
-            with open(path, 'a+') as file_handle:
+            with open(path, 'a+') as _:
                 pass
         else:
             print('Exiting.')
             sys.exit()
 
 
-def main(argv):
-    cwd = os.getcwd()
-    config_path = cwd + '/config.ini'
-    blocklist_path = cwd + '/blocklist.ini'
-    default_path = cwd + '/parse.txt'
-    dps_first = 1
-    dps_last = sys.maxsize
+def handle_casts(paths, player_data, blocked, make_table):
+    """
+    Generate formatted spell cast output.
+
+    :param paths: a list of paths to GamParse output
+    :param player_data: a PlayerData object
+    :param blocked: a Blocklist object of spells to be ignored
+    :param make_table: a function: f(eq_class, [[header strings...], ...], [[row strings], ...] -> string
+    """
+    cast_table = get_cast_table(paths, player_data, blocked)
+
     padding = '\n\n'
+    classes = cast_table.get_classes()
+    for i, eq_class in enumerate(sorted(classes)):
+        if i > 0:
+            print(padding)
 
-    parser = argparse.ArgumentParser(description='Transform GamParse output into your favorite forum table format.')
-    parser.add_argument('paths', help='a list of paths containing GamParse output', nargs='*', metavar='PATHS')
-    parser.add_argument('-b', '--blocklist', help='path to blocklist', metavar='PATH')
-    parser.add_argument('-c', '--config', help='path to config CSV file', metavar='PATH')
-    parser.add_argument('--dps', action='store_true', help='force dps formatting')
-    parser.add_argument('--tty', action='store_true', help='output text (default is enjin post format)')
-    parser.add_argument('--attn', action='store_true', help='reconstruct attendance list')  # Work in progress...
-    parser.add_argument('-f', '--dpsfirst', help='highest ranking dpser to show', metavar='FIRST')
-    parser.add_argument('-l', '--dpslast', help='lowest ranking dpser to show', metavar='LAST')
-
-    args = parser.parse_args()
-
-    # set input paths
-
-    if args.blocklist:
-        check_file(args.blocklist)
-        blocklist_path = args.blocklist
-    else:
-        check_default_file(blocklist_path)
-
-    if args.config:
-        check_file(args.config)
-        config_path = args.config
-    else:
-        check_default_file(config_path)
-
-    if args.dps:
-        handle_dps(args, config_path, default_path, dps_first, dps_last)
-    else:
-        handle_casts(args, blocklist_path, config_path, default_path, padding)
+        totals = ['Total'] + [str(t) for t in cast_table.get_totals(eq_class)]
+        spells, rows = cast_table.get_rows(eq_class)
+        cg.generate_class_graphs(spells, rows, eq_class)
+        print(make_table(eq_class, [spells, totals], rows))
 
 
-def handle_casts(args, blocklist_path, config_path, default_path, padding):
-    # read GamParse cast data into ParseDB
-    if args.paths:
-        for path in args.paths:
-            check_file(path)
-        reader = gpc.GPCastReader(args.paths[0], config_path, blocklist_path)
-    else:
-        reader = gpc.GPCastReader(default_path, config_path, blocklist_path)
-    pdb = parsedb.ParseDB(reader.config, caster_dod=reader.caster_dod)
-    if len(args.paths) > 1:
-        for path in args.paths[1:]:
-            reader = gpc.GPCastReader(path, config_path, blocklist_path)
-            pdb.update_cast_parse(reader.caster_dod)
-    # make cast output
-    if args.tty:
-        for i, eq_class in enumerate(sorted(reader.classes)):
-            if i:
-                print(padding)
-            ptab = pdb.get_cast_table(eq_class)
-            tf.print_table(tf.format_tty_table(ptab))
-    elif args.attn:  # Work in progress...
-        ptab = pdb.get_attn_table()
-        tf.print_table(tf.format_enjin_table(ptab))
-    else:
-        for i, eq_class in enumerate(sorted(reader.classes)):
-            if i:
-                print(padding)
-            ptab = pdb.get_cast_table(eq_class)
-            cg.generate_class_graphs(ptab)
-            tf.print_table(tf.format_enjin_table(ptab))
+def get_cast_table(paths, player_data, blocklist):
+    """
+    Create an aggregated CastTable from GamParse output file(s)
+
+    :param paths: a list of paths to GamParse output
+    :param player_data: a PlayerData object
+    :param blocklist: a list of spells to be ignored
+    :return: a CastTable object
+    """
+    reader = gpc.GPCastReader(player_data)
+
+    cast_tables = list()
+    for path in paths:
+        cast_tables.append(reader.get_cast_table(path, blocklist))
+    return casttable.aggregate(cast_tables)
 
 
-def handle_dps(args, config_path, default_path, dps_first, dps_last):
-    # set dps placement bounds
-    if args.dpsfirst:
-        dps_first = int(args.dpsfirst)
-        if dps_first < 1:
-            dps_first = 1
-    if args.dpslast:
-        dps_last = int(args.dpslast)
-        if dps_last < dps_first:
-            dps_last = dps_first
+def handle_dps(paths, player_data, dps_first, dps_last, make_table):
+    """
+    Generate formatted dps output.
 
-    # read GamParse DPS data into ParseDB
-    if len(args.paths) > 1:
+    :param paths: a list of paths to GamParse output
+    :param player_data: a PlayerData object
+    :param dps_first: the index of the first player to be shown
+    :param dps_last: the index of the last player to be shown
+    :param make_table: a function: f(eq_class, [[header strings...], ...], [[row strings], ...] -> string
+    """
+    dps_table = get_dps_table(paths, player_data)
+
+    headers, rows = dps_table.get_rows()
+    if dps_last > len(rows):
+        dps_last = len(rows)
+    print(make_table("DPS", [headers], rows[dps_first:dps_last]))
+
+
+def get_dps_table(paths, player_data):
+    if len(paths) > 1:
         print('Combining DPS parses is not currently supported. Ignoring input files {0}...'
-              .format(', '.join(args.paths[1:])))
-    if args.paths:
-        check_file(args.paths[0])
-        reader = gpc.GPDPSReader(args.paths[0], config_path)
-    else:
-        reader = gpc.GPDPSReader(default_path, config_path)
+              .format(', '.join(paths[1:])))
 
-    pdb = parsedb.ParseDB(reader.config, dps_reader=reader)
-    dtab = pdb.get_dps_table(first=dps_first, last=dps_last)
-
-    # make DPS output
-    if args.tty:
-        tf.print_table(tf.format_tty_table(dtab))
-    else:
-        tf.print_table(tf.format_enjin_table(dtab))
+    path = paths[0]
+    reader = gpd.GPDPSReader(player_data)
+    dps_table = reader.get_dps_table(path)
+    return dps_table
 
 
 if __name__ == '__main__':

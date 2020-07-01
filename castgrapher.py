@@ -4,7 +4,6 @@ import os
 import pygal as pg
 
 import everquestinfo as eq
-import parsedb
 
 
 class SpellFilter:
@@ -23,115 +22,118 @@ class SpellFilter:
         self.spells = spells
 
 
-def graph_heals(table: parsedb.ParseTable, separate_spells=False):
+def graph_heals(players, rows, eq_class, separate_spells=False):
     """
     Gather up heal spells and create healing graphs for each priest class.
 
-    :param table: ParseDB cast table
+    :param players: the players for whom data has been collected
+    :param rows: the name of each spell and the number of casts per player
+    :param eq_class: the class of players to be graphed (e.g., CLR)
     :param separate_spells: flag specifying whether heals should be grouped by type or named individually
     :return: void
     """
-    if table.title not in ['Clerics', 'Druids', 'Shamans']:
-        print('Heal graphs cannot be generated from the {0} table.'.format(table.title))
-        return
-
-    if not table.is_cast:
-        print('Cannot generate heal graphs from non-cast table.')
-        return
-
     heal_filter = SpellFilter('Heals', eq.heals)
-    graph_spells(table, heal_filter, separate_spells)
+    graph_spells(players, rows, eq_class, heal_filter, separate_spells)
 
     return
 
 
-def graph_utilities(table: parsedb.ParseTable, separate_spells=False):
+def graph_utilities(players, rows, eq_class, separate_spells=False):
     """
     Gather up utility spells and create healing graphs for each priest class.
 
-    :param table: ParseDB cast table
+    :param players: the players for whom data has been collected
+    :param rows: the name of each spell and the number of casts per player
+    :param eq_class: the class of players to be graphed (e.g., CLR)
     :param separate_spells: flag specifying whether utility spells should be grouped by type or named individually
     :return: void
     """
-    if table.title not in ['Clerics', 'Druids', 'Shamans']:
-        print('Utility graphs cannot be generated from the {0} table.'.format(table.title))
-        return
-
-    if not table.is_cast:
-        print('Cannot generate utility graphs from non-cast table.')
-
     utility_filter = SpellFilter('Utility', eq.utilities)
-    graph_spells(table, utility_filter, separate_spells)
+    graph_spells(players, rows, eq_class, utility_filter, separate_spells)
 
     return
 
 
-def graph_nukes(table: parsedb.ParseTable, separate_spells=False):
+def graph_nukes(players, rows, eq_class, separate_spells=False):
     """
     Gather up direct damage spells and create healing graphs for each priest class.
 
-    :param table: ParseDB cast table
+    :param players: the players for whom data has been collected
+    :param rows: the name of each spell and the number of casts per player
+    :param eq_class: the class of players to be graphed (e.g., CLR)
     :param separate_spells: flag specifying whether nukes should be grouped by type or named individually
     :return: void
     """
-    if table.title not in ['Clerics', 'Druids', 'Shamans']:
-        print('Nuke graphs cannot be generated from the {0} table.'.format(table.title))
-        return
-
     nuke_filter = SpellFilter('Nukes', eq.nukes)
-    graph_spells(table, nuke_filter, separate_spells)
+    graph_spells(players, rows, eq_class, nuke_filter, separate_spells)
 
     return
 
 
-def graph_spells(table: parsedb.ParseTable, spell_filter, separate_spells=False):
+def get_unpopulated_chart(title, players):
     """
-    Create bar graphs associating cast counts and spells to their respective casters.
+    Create a chart with a title and labeled axes.
 
-    :param table: ParseDB cast table
-    :param spell_filter: a typical grouping of spells into heals, utility, or nukes
-    :param separate_spells: a flag indicating whether spells should be grouped by type or named individually
-    :return: void
+    :param title: the chart title
+    :param players: a list of players to appear on the x-axis
     """
     st = pg.style.DarkStyle
     st.font_family = "DeJa Vu Sans"
     st.value_font_size = 8
     chart = pg.StackedBar(style=st, print_values=True, print_zeroes=False)
     chart.show_minor_y_labels = True
-    chart.title = '{0}: {1}'.format(table.title, spell_filter.name)
-    chart.x_labels = table.column_labels[1:]
+    chart.title = title
+    chart.x_labels = players
     chart.value_formatter = lambda x: '{0:d}'.format(int(x))
+    return chart
+
+
+def graph_spells(players, rows, eq_class, spell_filter, separate_spells=False):
+    """
+    Create bar graphs associating cast counts and spells to their respective casters.
+
+    :param players: the players for whom data has been collected
+    :param rows: the name of each spell and the number of casts per player
+    :param eq_class: the class of players to be graphed (e.g., CLR)
+    :param spell_filter: a typical grouping of spells into heals, utility, or nukes
+    :param separate_spells: a flag indicating whether spells should be grouped by type or named individually
+    :return: void
+    """
+    class_name = eq.eq_classes[eq_class]
+    title = '{0}: {1}'.format(class_name, spell_filter.name)
+    chart = get_unpopulated_chart(title, players[1:])
 
     if separate_spells:
-        spells = [row for row in table.rows if row[0] in spell_filter.spells.keys()]
+        spells = [row for row in rows if row[0] in spell_filter.spells.keys()]
         for spell in spells:
             chart.add(spell[0], spell[1:])
     else:
         spell_types = dict()
-        for row in table.rows:
+        for row in rows:
             t = spell_filter.spells.get(row[0], '')
             if t:
-                spell_types[t] = map(op.add, spell_types.get(t, [0] * len(row[1:])), row[1:])
+                vs = [int(v) for v in row[1:]]
+                spell_types[t] = map(op.add, spell_types.get(t, [0] * len(vs)), vs)
         for spell_type in sorted(spell_types.keys()):
             chart.add(spell_type, list(spell_types[spell_type]))
 
-    chart.render_to_png('{0}/{1}_{2}.png'.format(os.getcwd(), table.title.lower(), spell_filter.name.lower()))
-
-    return
+    chart.render_to_png('{0}/{1}_{2}.png'.format(os.getcwd(), class_name.lower(), spell_filter.name.lower()))
 
 
-def generate_class_graphs(table: parsedb.ParseTable):
+def generate_class_graphs(players, rows, eq_class):
     """
     Create spell cast graphs for each supported EQ class.
 
-    :param table: ParseDB cast table
+    :param players: the players for whom data has been collected
+    :param rows: the name of each spell and the number of casts per player
+    :param eq_class: the class of players to be graphed (e.g., CLR)
     :return: void
     """
     dispatch = {
-        'Clerics': [graph_heals, graph_utilities, graph_nukes],
-        'Druids': [graph_heals, graph_utilities, graph_nukes],
-        'Shamans': [graph_heals, graph_utilities, graph_nukes]
+        'CLR': [graph_heals, graph_utilities, graph_nukes],
+        'DRU': [graph_heals, graph_utilities, graph_nukes],
+        'SHM': [graph_heals, graph_utilities, graph_nukes]
     }
 
-    for f in dispatch.get(table.title, []):
-        f(table)
+    for f in dispatch.get(eq_class, []):
+        f(players, rows, eq_class)
