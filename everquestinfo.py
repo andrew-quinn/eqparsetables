@@ -17,6 +17,11 @@ eq_classes = {
     'WIZ': 'Wizards'
 }
 
+
+def get_class_name(eq_class):
+    return eq_classes[eq_class]
+
+
 heals = {
     # Clerics
     'Beacon of Life': 'AA + Clicks',

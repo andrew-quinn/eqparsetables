@@ -14,6 +14,9 @@ class Table:
 
         return eq_class in self.get_classes()
 
+    def get_players(self):
+        return list(self.data['alias'])
+
     def get_rows(self, eq_class=None):
         if not self.is_class_included(eq_class):
             return []

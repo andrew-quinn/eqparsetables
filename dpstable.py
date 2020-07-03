@@ -12,8 +12,13 @@ class DPSTable(table.Table):
 
         return list(self.total)
 
-    def _format_row_data(self, num):
-        return format.humanize(num)
+    def _get_table(self, eq_class=None):
+        t = super(DPSTable, self)._get_table(eq_class)
+        t.index = t.index + 1
+        return t
+
+    # def _format_row_data(self, num):
+    #     return format.humanize(num)
 
     def _get_drop_columns(self):
         return ['pct', 'dps', 'time']

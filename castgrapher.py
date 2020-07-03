@@ -2,8 +2,10 @@ import operator as op
 import os
 
 import pygal as pg
+import pygal.style as style
 
 import everquestinfo as eq
+import format
 
 
 class SpellFilter:
@@ -77,7 +79,7 @@ def get_unpopulated_chart(title, players):
     :param title: the chart title
     :param players: a list of players to appear on the x-axis
     """
-    st = pg.style.DarkStyle
+    st = style.DarkStyle
     st.font_family = "DeJa Vu Sans"
     st.value_font_size = 8
     chart = pg.StackedBar(style=st, print_values=True, print_zeroes=False)
@@ -99,7 +101,7 @@ def graph_spells(players, rows, eq_class, spell_filter, separate_spells=False):
     :param separate_spells: a flag indicating whether spells should be grouped by type or named individually
     :return: void
     """
-    class_name = eq.eq_classes[eq_class]
+    class_name = eq.get_class_name(eq_class)
     title = '{0}: {1}'.format(class_name, spell_filter.name)
     chart = get_unpopulated_chart(title, players[1:])
 
@@ -137,3 +139,27 @@ def generate_class_graphs(players, rows, eq_class):
 
     for f in dispatch.get(eq_class, []):
         f(players, rows, eq_class)
+
+
+def graph_dps(rows, eq_class=None):
+    if eq_class is None:
+        class_name = 'All'
+    else:
+        class_name = eq.get_class_name(eq_class)
+
+    title = 'SDPS: {0}'.format(class_name)
+
+    st = style.DarkStyle
+    st.font_family = "DeJa Vu Sans"
+    # st.label_font_size = 12
+    chart = pg.HorizontalBar(
+        style=st,
+        title=title,
+        show_legend=False,
+        print_labels=True,
+        )
+
+    for row in rows:
+        chart.add(row[0], [{'value': row[1], 'label': '{0}: {1}'.format(row[0], row[1])}])
+
+    chart.render_to_png('{0}/sdps_{1}.png'.format(os.getcwd(), class_name.lower()))

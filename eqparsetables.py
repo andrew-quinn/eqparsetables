@@ -12,6 +12,7 @@ import enjinformatter
 import ttyformatter
 import playerdata
 import casttable
+import format
 
 __author__ = 'Andrew Quinn'
 __copyright__ = 'Copyright 2015-2016, Andrew Quinn'
@@ -107,7 +108,7 @@ def get_dps_bounds(args):
     :return: placement indices of the first and last players to be shown
     """
     dps_first = 0
-    dps_last = sys.maxsize
+    dps_last = 10
 
     if args.dpsfirst:
         dps_first = int(args.dpsfirst) - 1
@@ -189,7 +190,12 @@ def handle_dps(paths, player_data, dps_first, dps_last, make_table):
     headers, rows = dps_table.get_rows()
     if dps_last > len(rows):
         dps_last = len(rows)
-    print(make_table("DPS", [headers], rows[dps_first:dps_last]))
+
+    formatted_rows = [[format.humanize(cell) for cell in row] for row in rows]
+    print(make_table("DPS", [headers], formatted_rows[dps_first:dps_last]))
+    players = dps_table.get_players()
+    chart_rows = [[row[1], int(row[3])] for row in rows]
+    cg.graph_dps(chart_rows[dps_first:dps_last])
 
 
 def get_dps_table(paths, player_data):
