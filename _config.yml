@@ -1,0 +1,8 @@
+title: EQParseTables
+description: Transform GamParse output into various table formats
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-hacker
+
+gems:
+  - jekyll-mentions
