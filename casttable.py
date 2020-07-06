@@ -22,6 +22,8 @@ class CastTable(table.Table):
             .set_index('alias')\
             .T\
             .astype('int32')
+
+        t = t.reindex(sorted(t.index), axis='rows')
         return t
 
     def _get_drop_columns(self):

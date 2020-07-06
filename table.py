@@ -49,8 +49,17 @@ class Table:
     def _get_drop_columns(self):
         return []
 
+    def _is_drop_column(self, col):
+        drop_cols = self._get_drop_columns()
+        for prefix in drop_cols:
+            if col.startswith(prefix):
+                return True
+        return False
+
     def _sanitize_table(self, df, player_data):
         df = pd.merge(df, player_data.get_data(), how='left')
-        df.drop(df[self._get_drop_columns()], axis='columns', inplace=True)
+        drop_cols = [col for col in df.columns if self._is_drop_column(col)]
+
+        df.drop(df[drop_cols], axis='columns', inplace=True)
         return df
 
