@@ -47,7 +47,7 @@ class GPDPSReader:
         elif n:
             player = n.group('name')
             if not self.player_data.is_player(player) and player != 'Total':
-                print('Unrecognized player {0}. Did you forget to associate a pet with its owner?'.format(player))
+                print(f'Unrecognized player {player}. Did you forget to associate a pet with its owner?')
                 return 'unknown'
         return player
 
@@ -78,8 +78,12 @@ class GPDPSReader:
                 if player == 'unknown' or player == 'Total':
                     continue
                 b = dps_grabber.match(line[len(dmg_bullet):])
-                stats = {'name': player, 'total': b.group('total'), 'sdps': b.group('sdps'), 'dps': b.group('dps'),
-                         'time': b.group('time'), 'pct': b.group('pct')}
+                stats = {'name': player,
+                         'total': b.group('total'),
+                         'sdps': b.group('sdps'),
+                         'dps': b.group('dps'),
+                         'time': b.group('time'),
+                         'pct': b.group('pct')}
                 stats_list.append(stats)
 
         return stats_list

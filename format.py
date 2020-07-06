@@ -14,4 +14,4 @@ def humanize(s):
         n /= 1000.0
         mag += 1
 
-    return '{0:.1f}{1}'.format(n, suffix[mag])
+    return f'{n:.1f}{suffix[mag]}'

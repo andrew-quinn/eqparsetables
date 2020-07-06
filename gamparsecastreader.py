@@ -41,7 +41,7 @@ class GPCastReader:
         elif n:
             player = n.group('name')
             if not self.player_data.is_player(player) and player != 'Total':
-                print('Unrecognized player {0}. Please update your config file.'.format(player))
+                print(f'Unrecognized player {player}. Please update your config file.')
                 player = 'unknown'
         return player
 
@@ -54,8 +54,8 @@ class GPCastReader:
                 scc = line[len(gp_bullet):].split(" - ")
                 spell = self.rk.sub('', scc[0])
                 if spell in stats:
-                    print(('Spell {0} already exists for {1} with cast count {2}... '
-                           'incrementing by {3}').format(spell, caster, stats[spell], scc[1]))
+                    print((f'Spell {spell} already exists for {caster} with cast count {stats[spell]}... '
+                           f'incrementing by {scc[1]}'))
                     stats[spell] = str(int(stats[spell]) + int(scc[1]))
                 else:
                     stats.update({spell: scc[1]})

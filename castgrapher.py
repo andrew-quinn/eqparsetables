@@ -85,7 +85,7 @@ def get_unpopulated_chart(title, players):
     chart.show_minor_y_labels = True
     chart.title = title
     chart.x_labels = players
-    chart.value_formatter = lambda x: '{0:d}'.format(int(x))
+    chart.value_formatter = lambda x: f'{int(x)}'
     return chart
 
 
@@ -118,7 +118,7 @@ def graph_spells(players, rows, eq_class, spell_filter, separate_spells=False):
         for spell_type in sorted(spell_types.keys()):
             chart.add(spell_type, list(spell_types[spell_type]))
 
-    chart.render_to_png('{0}/{1}_{2}.png'.format(os.getcwd(), class_name.lower(), spell_filter.name.lower()))
+    chart.render_to_png(f'{os.getcwd()}/{class_name.lower()}_{spell_filter.name.lower()}.png')
 
 
 def generate_class_graphs(players, rows, eq_class):
@@ -146,11 +146,11 @@ def graph_dps(rows, eq_class=None):
     else:
         class_name = eq.get_class_name(eq_class)
 
-    title = 'SDPS: {0}'.format(class_name)
+    title = f'SDPS: {class_name}'
 
     st = style.DarkStyle
     st.font_family = "DeJa Vu Sans"
-    # st.label_font_size = 12
+    st.label_font_size = 8
     chart = pg.HorizontalBar(
         style=st,
         title=title,
@@ -159,6 +159,6 @@ def graph_dps(rows, eq_class=None):
     )
 
     for row in rows:
-        chart.add(row[0], [{'value': row[1], 'label': '{0}: {1}'.format(row[0], row[1])}])
+        chart.add(row[0], [{'value': row[1], 'label': f'{row[0]}: {row[1]}'}])
 
-    chart.render_to_png('{0}/sdps_{1}.png'.format(os.getcwd(), class_name.lower()))
+    chart.render_to_png(f'{os.getcwd()}/sdps_{class_name.lower()}.png')

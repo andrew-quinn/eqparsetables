@@ -2,11 +2,11 @@ def make_table(title, headers, rows):
     gutter_width, cell_width = get_cell_widths(headers + rows)
 
     w = gutter_width + (len(rows[0]) - 1) * cell_width
-    header_fmt = '{:_^' + str(w) + '}\n'
+    header_fmt = f'{{:_^{w}}}\n'
     str_list = [header_fmt.format(title)]
 
-    gutter_fmt = '{:>' + str(gutter_width) + '} '
-    cell_fmt = '{:' + str(cell_width) + '}'
+    gutter_fmt = f'{{:>{gutter_width}}} '
+    cell_fmt = f'{{:{cell_width}}}'
 
     for r in headers + rows:
         gutter = r[0]

@@ -55,7 +55,7 @@ def main(argv):
 
 
 def get_input_paths(args):
-    default_path = os.getcwd() + '/parse.txt'
+    default_path = f'{os.getcwd()}/parse.txt'
     paths = list()
     if args.paths:
         for path in args.paths:
@@ -68,7 +68,7 @@ def get_input_paths(args):
 
 
 def get_blocklist(args):
-    blocklist_path = os.getcwd() + '/blocklist.ini'
+    blocklist_path = f'{os.getcwd()}/blocklist.ini'
     if args.blocklist:
         check_file(args.blocklist)
         blocklist_path = args.blocklist
@@ -84,7 +84,7 @@ def get_blocklist(args):
 
 
 def get_player_data(args):
-    config_path = os.getcwd() + '/config.ini'
+    config_path = f'{os.getcwd()}/config.ini'
     if args.config:
         check_file(args.config)
         config_path = args.config
@@ -120,13 +120,13 @@ def get_dps_bounds(args):
 
 def check_file(path):
     if not os.path.isfile(path):
-        print("Could not find the file {0}. Exiting.".format(path))
+        print(f'Could not find the file {path}. Exiting.')
         sys.exit()
 
 
 def check_default_file(path):
     if not os.path.isfile(path):
-        answer = input("Could not find the file {0}. Would you like to create a blank version now? [y/N] ".format(path))
+        answer = input(f'Could not find the file {path}. Would you like to create a blank version now? [y/N] ')
         if str(answer).lower() == 'y':
             with open(path, 'a+') as _:
                 pass
@@ -200,8 +200,8 @@ def handle_dps(paths, player_data, dps_first, dps_last, make_table):
 
 def get_dps_table(paths, player_data):
     if len(paths) > 1:
-        print('Combining DPS parses is not currently supported. Ignoring input files {0}...'
-              .format(', '.join(paths[1:])))
+        print(f'Combining DPS parses is not currently supported. '
+              f'Ignoring input files {", ".join(paths[1:])}...')
 
     path = paths[0]
     reader = gpd.GPDPSReader(player_data)

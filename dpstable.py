@@ -16,8 +16,5 @@ class DPSTable(table.Table):
         t.index = t.index + 1
         return t
 
-    # def _format_row_data(self, num):
-    #     return format.humanize(num)
-
     def _get_drop_columns(self):
         return ['pct', 'dps', 'time']
