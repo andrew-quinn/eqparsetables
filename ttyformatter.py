@@ -24,4 +24,3 @@ def get_cell_widths(rows):
         gutter = max(gutter, len(str(r[0])))
         cell = max([cell] + [len(str(c)) for c in r[1:]])
     return gutter, cell
-

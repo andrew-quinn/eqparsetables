@@ -45,5 +45,3 @@ def format_enjin_row(row_values):
     row = '[tr][td]{0}[/td][/tr]'
     row_sep = '[/td][td]'
     return row.format(row_sep.join(row_values))
-
-

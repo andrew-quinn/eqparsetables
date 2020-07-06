@@ -17,11 +17,11 @@ class CastTable(table.Table):
         return list(totals)
 
     def _get_table(self, eq_class=None):
-        t = super(CastTable, self)._get_table(eq_class)\
-            .dropna(axis='columns', how='all')\
-            .fillna(0)\
-            .set_index('alias')\
-            .T\
+        t = super(CastTable, self)._get_table(eq_class) \
+            .dropna(axis='columns', how='all') \
+            .fillna(0) \
+            .set_index('alias') \
+            .T \
             .astype('int32')
 
         t = t.reindex(sorted(t.index), axis='rows')
@@ -41,4 +41,3 @@ def aggregate(cast_data_list):
         t.data = pd.concat(cast_tables).groupby(level=0).max()
 
     return t
-

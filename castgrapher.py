@@ -156,7 +156,7 @@ def graph_dps(rows, eq_class=None):
         title=title,
         show_legend=False,
         print_labels=True,
-        )
+    )
 
     for row in rows:
         chart.add(row[0], [{'value': row[1], 'label': '{0}: {1}'.format(row[0], row[1])}])

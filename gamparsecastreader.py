@@ -80,7 +80,7 @@ class GPCastReader:
                 caster = self.read_entry_header(gp_header, name_grabber, line)
                 if caster == 'unknown':
                     continue
-                stats_list.append(self.get_caster_stats(caster, lines[i+1:]))
+                stats_list.append(self.get_caster_stats(caster, lines[i + 1:]))
 
         return stats_list
 
