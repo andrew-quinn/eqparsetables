@@ -1,5 +1,4 @@
 import table
-import format
 
 
 class DPSTable(table.Table):

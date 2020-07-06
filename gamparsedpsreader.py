@@ -1,5 +1,5 @@
-import collections
 import re
+
 import dpstable
 
 

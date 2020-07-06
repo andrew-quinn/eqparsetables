@@ -62,4 +62,3 @@ class Table:
 
         df.drop(df[drop_cols], axis='columns', inplace=True)
         return df
-

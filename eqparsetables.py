@@ -6,13 +6,13 @@ import os
 import sys
 
 import castgrapher as cg
+import casttable
+import enjinformatter
+import format
 import gamparsecastreader as gpc
 import gamparsedpsreader as gpd
-import enjinformatter
-import ttyformatter
 import playerdata
-import casttable
-import format
+import ttyformatter
 
 __author__ = 'Andrew Quinn'
 __copyright__ = 'Copyright 2015-2016, Andrew Quinn'

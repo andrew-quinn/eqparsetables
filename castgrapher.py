@@ -5,7 +5,6 @@ import pygal as pg
 import pygal.style as style
 
 import everquestinfo as eq
-import format
 
 
 class SpellFilter:
