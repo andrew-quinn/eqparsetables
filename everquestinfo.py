@@ -17,6 +17,11 @@ eq_classes = {
     'WIZ': 'Wizards'
 }
 
+
+def get_class_name(eq_class):
+    return eq_classes[eq_class]
+
+
 heals = {
     # Clerics
     'Beacon of Life': 'AA + Clicks',
@@ -83,8 +88,6 @@ heals = {
     'Glacial Gift': 'Twincast'
 }
 
-
-
 utilities = {
     # Clerics
     'Blessing of Resurrection': 'Rezzes',
@@ -142,7 +145,6 @@ utilities = {
     'Tigir\'s Swarm': 'Slows',
     'Tigir\'s Insects': 'Slows',
 
-
     # Common
     'Call of the Wild': 'Rezzes',
     'Resurrection': 'Rezzes',
@@ -155,7 +157,6 @@ utilities = {
     'Purified Spirits': 'Cures',
     'Unblemished Blood': 'Cures',
 }
-
 
 nukes = {
     # Clerics
@@ -193,7 +194,6 @@ nukes = {
 
 }
 
-
 cleric_heal_alts = [
     'Beacon of Life',
     'Burst of Life',
@@ -205,7 +205,6 @@ cleric_heal_alts = [
     'Second Spire of Divinity'
 ]
 
-
 cleric_utility_alts = [
     'Divine Arbitration',
     'Divine Balance',
@@ -214,7 +213,6 @@ cleric_utility_alts = [
     'Quiet Miracle',
     'Radiant Cure'
 ]
-
 
 cleric_nuke_alts = [
     'Battle Frenzy',
