@@ -17,7 +17,7 @@ the forum output from GamParse into a file and point the script at it. For
 example, if you save your parse summary as healparse.txt, you'd call 
 
 ```bash
-$ python3 eqparsetables.py healparse.txt`
+$ python3 eqparsetables.py healparse.txt
 ```
 
 from the command line. For your convenience, EQParseTables looks for data in a
